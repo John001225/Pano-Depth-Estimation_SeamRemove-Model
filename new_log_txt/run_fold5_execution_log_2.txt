@@ -1,0 +1,5 @@
+Executing run.py in /home/user/sheng/panoDepth/Depth-Anything-V2/metric_depth
+----------------------------------------
+----------------------------------------
+Successfully executed run.py in 0:46:44.486613
+

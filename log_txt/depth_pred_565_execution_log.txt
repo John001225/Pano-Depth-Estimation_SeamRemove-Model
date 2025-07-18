@@ -1,0 +1,5 @@
+Executing depth_pred.py in /home/user/sheng/panoDepth/Depth-Anything/metric_depth
+----------------------------------------
+----------------------------------------
+Successfully executed depth_pred.py in 0:47:03.889627
+
