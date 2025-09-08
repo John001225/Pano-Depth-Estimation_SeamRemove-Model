@@ -10,6 +10,7 @@ CRF360D/pretrained_models/results
 seamRemove/dataset
 seamRemove/for_ablation/output
 seamRemove/output_new
+seamRemove/output
 seamRemove/checkpoints_registered
 seamRemove/checkpoints_stitched
 seamRemove/checkpoints_stitched_new

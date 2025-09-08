@@ -9,6 +9,7 @@ from model import get_model
 from losses import total_loss
 from tqdm import tqdm
 from PIL import Image
+import time
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -22,13 +23,16 @@ checkpoint_path = f'checkpoints_{type}_new/best_model_epoch94_loss0.2009_2025060
 # type2s = ['depthAnythingV2_metric_raw_5_6_5_fold_padding_6', 'leres_5_6_5_fold_padding_6', 'depthAnything_metric_raw_5_6_5_fold', 'depthAnything_metric_raw_6_fold_padding', 'depthAnything_metric_raw_fold5', 'depthAnything_metric_raw_fold6']
 # type2s = ["depthAnything_metric_raw_3_fold", "depthAnything_metric_raw_4_fold", "depthAnything_metric_raw_3_6_3_fold", "depthAnything_metric_raw_4_6_4_fold"
 #           , "depthAnything_metric_raw_6_fold_padding_15", "depthAnything_metric_raw_6_fold_padding_30"]
-type2s = ['depthAnything_metric_raw_5_6_5_fold_padding_6', 'depthAnythingV2_metric_raw_5_6_5_fold_padding_6', 'leres_5_6_5_fold_padding_6', 'zoe_raw_5_6_5_fold_padding_6',
-          "depthAnything_metric_raw_3_fold", "depthAnything_metric_raw_4_fold", "depthAnything_metric_raw_3_6_3_fold", "depthAnything_metric_raw_4_6_4_fold", 
-          "depthAnything_metric_raw_6_fold_padding_15", "depthAnything_metric_raw_6_fold_padding_30", 'depthAnything_metric_raw_5_6_5_fold', 
-          'depthAnything_metric_raw_6_fold_padding', 'depthAnything_metric_raw_fold5', 'depthAnything_metric_raw_fold6']
+# type2s = ['depthAnything_metric_raw_5_6_5_fold_padding_6', 'depthAnythingV2_metric_raw_5_6_5_fold_padding_6', 'leres_5_6_5_fold_padding_6', 'zoe_raw_5_6_5_fold_padding_6',
+#           "depthAnything_metric_raw_3_fold", "depthAnything_metric_raw_4_fold", "depthAnything_metric_raw_3_6_3_fold", "depthAnything_metric_raw_4_6_4_fold", 
+#           "depthAnything_metric_raw_6_fold_padding_15", "depthAnything_metric_raw_6_fold_padding_30", 'depthAnything_metric_raw_5_6_5_fold', 
+#           'depthAnything_metric_raw_6_fold_padding', 'depthAnything_metric_raw_fold5', 'depthAnything_metric_raw_fold6']
+# type2s = ['depthAnything_metric_raw_5_6_5_fold_padding_6']
+type2s = ['depthAnything_metric_raw_5_6_5_fold', 'depthAnything_metric_raw_5_6_5_fold_padding_6', 
+          'depthAnything_metric_raw_fold6', 'depthAnything_metric_raw_6_fold_padding', 'depthAnything_metric_raw_fold5']
 
 for type2 in type2s:
-    type2dir = f'output_new/{type2}'
+    type2dir = f'output/{type2}'
     os.makedirs(type2dir, exist_ok=True)
     save_dir = f'{type2dir}/result_{type}_seamless'
     os.makedirs(save_dir, exist_ok=True)
@@ -55,6 +59,7 @@ for type2 in type2s:
     # Evaluate
     total_test_loss = 0.0
     test_pbar = tqdm(test_loader, desc=f"Evaluating on Test Set {type2} {type}", dynamic_ncols=True)
+    start = time.time()
 
     with torch.no_grad():
         for idx, (input_tensor, gt) in enumerate(test_pbar):
@@ -78,3 +83,7 @@ for type2 in type2s:
 
     avg_test_loss = total_test_loss / len(test_loader)
     print(f"\n✅ Average Test Loss: {avg_test_loss:.4f}")
+    end = time.time()
+    txt_file = os.path.join(save_dir, f'{type2}_seamremove.txt')
+    with open(txt_file, "w", encoding="utf-8") as f:
+        f.write(f"執行時間: {end-start:.4f} 秒\n")
